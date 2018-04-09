@@ -1,9 +1,9 @@
 function [PIN]=stringsplit(dw)
 %字符分割方法，利用垂直投影法
 if ndims(dw) == 3%如果为rgb图像则转换为灰度图像
-I1=rgb2gray(dw);
-else 
-I1=dw;
+    I1=rgb2gray(dw);
+else
+    I1=dw;
 end
 g_max=double(max(max(I1)));
 g_min=double(min(min(I1)));
@@ -26,16 +26,16 @@ end
 Px0=1;
 Px1=1;
 
-minWidth = n / 14;
+minWidth = n / 16;
 
 PIN = cell(7);
 i = 1;
 while(Px0 < n && Px1 < n && i <=7)%分割字符
-    while((XX1(1,Px0)<3)&&(Px0<x1))%求字符的左边界
+    while((Px0<x1)&&(XX1(1,Px0)<1))%求字符的左边界
         Px0=Px0+1;
     end
     Px1=Px0;
-    while(((XX1(1,Px1)>=3)&&(Px1<x1))||((Px1-Px0)<10))%求字符右边界
+    while(((Px1<x1)&&(XX1(1,Px1)>=1))||((Px1-Px0)<10))%求字符右边界
         Px1=Px1+1;
     end
     
@@ -43,31 +43,11 @@ while(Px0 < n && Px1 < n && i <=7)%分割字符
         Z=dw(:,Px0:Px1,:);
         PIN{i} = Z;
         
-%         figure(3);
-%         subplot(1,7,i);
-%         imshow(Z);
-
+        figure(3);
+        subplot(1,7,i);
+        imshow(Z);
+        
         i = i + 1;
     end
-    
-%     switch strcat('Z',num2str(i))
-%     case 'Z1'
-%     PIN0=Z;
-%     case 'Z2'
-%     PIN1=Z;
-%     case 'Z3'
-%     PIN2=Z;
-%     case 'Z4'
-%     PIN3=Z;
-%     case 'Z5'
-%     PIN4=Z;
-%     case 'Z6'
-%     PIN5=Z;
-%     otherwise
-%     PIN6=Z;
-%     end
-%     figure(3);
-%     subplot(1,7,i);
-%     imshow(Z);
     Px0=Px1;
 end

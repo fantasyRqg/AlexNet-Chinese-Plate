@@ -6,7 +6,7 @@
     
     img = imread([pathname filesep filename]);
     dw = location(img);
-%     figure(2);imshow(dw);
+    figure(2);imshow(dw);
     PIN=stringsplit(dw);
     pSize = size(PIN,1);
     plate = '';
@@ -18,7 +18,7 @@
         end
         
         p = imresize(p,[227 227]);
-        figure(1);subplot(1,pSize,i);imshow(p);
+%         figure(1);subplot(1,pSize,i);imshow(p);
         pred = classify(plateNet,p);
         plate = strcat(plate ,{' '}, char(pred));
     end
