@@ -10,20 +10,18 @@ g_min=double(min(min(I1)));
 t=round(g_max-(g_max-g_min)/3);%阈值
 [m,n]=size(I1);
 I2=imbinarize(I1,t/256);%二值化
-% % 腐蚀噪声
-% I2= imresize(I2,6);
-% 
-% % se = strel('square',4);
-% % 
-% % II2 = imclose(II2,se);
-% 
-% se = strel('square',2);
-% I2 = imerode(I2,se);
-% 
-% 
-% I2 = imresize(I2,1/6);
+% 腐蚀噪声
+I2= imresize(I2,4);
 
-% figure(6),imshow(I2);title('gray img');
+% se = strel('square',4);
+% 
+% II2 = imclose(II2,se);
+
+se = strel('line',5,90);
+I2 = imerode(I2,se);
+I2 = imresize(I2,1/4);
+
+figure(6),imshow(I2);title('gray img');
 
 [y1,x1,z1]=size(I2);
 I3=I2;
@@ -48,16 +46,14 @@ for jj=flateWidth + 1:size(XX1,2)-flateWidth - 1
     if(XX1(1,jj) < minWhitePixl)
         flateSum = 0;
         for ll=jj - flateWidth:jj+flateWidth
-            if(XX1(1,ll) >= minWhitePixl)
-                flateSum = minWhitePixl + round(XX1(1,ll)*0.05) + flateSum;
-            end
+            flateSum =  + flateSum;
         end
         
-        XX1(1,jj) = XX1(1,jj) + round(flateSum / (flateWidth * 2));
+        XX1(1,jj) = XX1(1,jj) + round(flateSum * 0.05);
     end
 end
 
-% figure(7),plot(1:x1,XX1);
+figure(7),plot(1:x1,XX1);
 Px0=1;
 Px1=1;
 
@@ -68,11 +64,11 @@ PIN = cell(1,7);
 i = 1;
 while(Px0 < n && Px1 < n && i <=7)%分割字符
     l_Px0 = Px0;
-    while((Px0<x1)&&(XX1(1,Px0)<minWhitePixl) )%求字符的左边界
+    while((Px0<x1)&&(XX1(1,Px0)<minWhitePixl) && (Px0 <= n))%求字符的左边界
         Px0=Px0+1;
     end
     Px1=Px0;
-    while(((Px1<x1)&&(XX1(1,Px1)>=minWhitePixl))||((Px1-Px0)< minWidth ) )%求字符右边界
+    while(((Px1<x1)&&(XX1(1,Px1)>=minWhitePixl))||((Px1-Px0)<10) && (Px1 <= n))%求字符右边界
         Px1=Px1+1;
     end
     

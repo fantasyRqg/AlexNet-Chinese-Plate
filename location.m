@@ -52,5 +52,12 @@ while((X1(1,PX2)<15)&&(PX2>PX1))%求车牌右边界
 end
 PX1=PX1-1;
 PX2=PX2+1;
+PX1 = clamp(PX1,1,x);
+PX2 = clamp(PX2,PX1,x);
+
+PY1 = clamp(PY1,1,y);
+PY2 = clamp(PY2,PY1,y);
+
 dw=i1(PY1:PY2,PX1:PX2,:);%求得车牌区域
 % figure(7),imshow(dw);
+end
